@@ -77,7 +77,7 @@ def rigidityScore(accel_data):
     amplitude_accel_z = np.max(accel_data['AccZArray']) - np.min(accel_data['AccZArray'])
             
     # Calculate rigidity score
-    rigidity_score = (std_accel_x + std_accel_y + std_accel_z) / 3 + (amplitude_accel_x + amplitude_accel_y + amplitude_accel_z) / 3
+    rigidity_score = (std_gyro_x+std_gyro_y+std_gyro_z)/3+(amplitude_gyro_x+amplitude_gyro_y+amplitude_gyro_z)/3
     #print("Rigidity Score: ",rigidity_score)  
      
     # Normalize rigidity score to a scale of 0-4
@@ -104,8 +104,7 @@ def bradykinesiaScore(accel_data):
     amplitude_accel_z = np.max(accel_data['AccZArray']) - np.min(accel_data['AccZArray'])
             
     # Calculate rigidity score
-    bradykinesia_score = (mean_accel_x + mean_accel_y + mean_accel_z) / 3 + (amplitude_accel_x + amplitude_accel_y + amplitude_accel_z) / 3
-    print("bradykinesia Score: ",bradykinesia_score)   
+    bradykinesia_score=(mean_heart_rate)/3+(std_heart_rate)/3  
     # Normalize rigidity score to a scale of 0-4
     normalized_bradykinesia_score = 4 - ((bradykinesia_score - 0.5) / (2 - 0.5)) * 4  # Assuming maximum possible value is 10
     print("normalized_bradykinesia Score: ",normalized_bradykinesia_score)  
@@ -150,6 +149,9 @@ def predict():
     global Postural_Instability_Score
     global dataReady
 
+
+tremor_score=(max_accel_x−min_accel_x) +(max_accel_y−min_accel_y)+(max_accel_z−min_accel_z)  / 3
+​
     try:
         # Get the data from the request
         data = request.get_json()
